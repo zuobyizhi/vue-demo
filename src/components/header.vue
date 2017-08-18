@@ -1,7 +1,7 @@
 <template>
 	<div class="main-header">
     <ul>
-      <li><a href='/'>首页</a></li>
+      <li><router-link to="/">首页</router-link></li>
       <li><router-link to="fontreference">字体参考</router-link></li>
       <li><router-link to="tomato">计时器</router-link></li>
     </ul>
@@ -9,6 +9,19 @@
 </template>
 
 <script>
+export default {
+  name: 'hello',
+  data () {
+    return {
+      curTab: 1
+    }
+  },
+  methods: {
+    curTabChange () {
+      this.$store.state.curTab = this.curTab
+    }
+  }
+}
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -31,5 +44,9 @@ li {
   padding: 0 15px;
   position: relative;
   line-height: 50px;
+}
+
+.curtab {
+	background-color: #32a973
 }
 </style>

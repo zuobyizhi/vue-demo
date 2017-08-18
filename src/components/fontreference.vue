@@ -1,27 +1,30 @@
 <template>
   <div class="hello">
-		<input class="inp" v-model="msg"/>
 		<div class="btns">
-			字体：
+      <label>文字：</label>
+      <input class="inp" v-model="msg"/>
+		</div>
+		<div class="btns">
+			<label>字体：</label>
 			<button @click="fontClass='songti'">宋体</button>
 			<button @click="fontClass='yahei'">雅黑</button>
 			<button @click="fontClass='heiti'">黑体</button>
 			<button @click="fontClass='Monaco'">Monaco</button>
 		</div>
 		<div class="btns">
-			大小：
+			<label>大小：</label>
 			<input class="fontSize" v-model="fontSize"/>
 		</div>
 		<div class="btns">
-			字体颜色：
+			<label>字体颜色：</label>
 			<input v-model="activeColor"/>
 		</div>
 		<div class="btns">
-			背景颜色：
+			<label>背景颜色：</label>
 			<input v-model="bgColor"/>
 		</div>
 		<div class="btns">
-			粗度：
+			<label>粗度：</label>
 			<button @click="weightClass='normal'">normal</button>
 			<button @click="weightClass='bold'">bold</button>
 			<button @click="weightClass='bolder'">bolder</button>
@@ -64,36 +67,18 @@ export default {
 }
 .btns{
 	margin: 18px;
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
 }
 .inp{
 	margin: 8px;
 }
 
-input {
-	margin: 8px;
-  height: 26px;
-  border-color: #d2d2d2;
-  border-width: 1px;
-  border-style: solid;
-  outline: none;
-}
-input:focus {
-  border-color: #34a97e;
-}
-input:active {
-  border-color: #34a97e;
-}
-
-button {
-  margin: 5px;
-  padding: 10px 20px 10px 20px;
-  color: #fff;
-  background-color: #42b983;
-  border-radius: 3px;
-  outline: none;
-}
-button:hover {
-  background-color: #34a97e;
+label {
+  width: 100px;
+  display:inline-block;
 }
 
 h1, h2 {

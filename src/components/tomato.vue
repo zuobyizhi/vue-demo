@@ -7,6 +7,9 @@
 			<input class="inp" v-model="time"/>
       <button @click="addTimer">确认</button>
 		</div>
+		<div class="btns" style="color: red;" v-if="errMsg !== ''">
+      <label>{{errMsg}}</label>
+		</div>
 		<div class="btns">
       <table class="table">
         <thead>
@@ -39,17 +42,27 @@ export default {
     return {
       timer: [{msg: '计时器1', time: 111, work: false}, {msg: '计时器2', time: 222, work: false}],
       msg: '',
+      errMsg: '',
       time: ''
     }
   },
   methods: {
     addTimer () {
-      if (this.msg === '' || this.time === '') {
+      function isNumber (obj) {
+        return Number(obj) === +obj
+      }
+      if (!isNumber(this.time)) {
+        this.errMsg = '倒计时必须为数字'
         return
       }
-      this.timer.push({msg: this.msg, time: this.time, work: false})
+      if (this.msg.trim() === '' || this.time.trim() === '') {
+        this.errMsg = '内容和倒计时必须非空'
+        return
+      }
+      this.timer.push({msg: this.msg.trim(), time: this.time.trim(), work: false})
       this.msg = ''
       this.time = ''
+      this.errMsg = ''
     },
     setTimerWork (i, bWork) {
       this.timer[i].work = bWork
@@ -93,59 +106,6 @@ export default {
 <style scoped>
 .btns{
 	margin: 18px;
-}
-.deleteBtn {
-  background-color: #d73925;
-}
-.deleteBtn:hover {
-  background-color: #ac2925;
-}
-
-input {
-	margin: 8px;
-  height: 26px;
-  border-color: #d2d2d2;
-  border-width: 1px;
-  border-style: solid;
-  outline: none;
-}
-input:focus {
-  border-color: #34a97e;
-}
-input:active {
-  border-color: #34a97e;
-}
-.table{
-  width: 100%;
-  max-width: 100%;
-}
-
-th {
-  background-color: #34a97e;
-  border-color: #ddd;
-  border-width: 1px;
-  padding: 8px;
-  color: #fff;
-  font-weight: normal;
-}
-
-td {
-  background-color: #fdfdfd;
-  border-color: #ddd;
-  border-width: 1px;
-  padding: 8px;
-}
-
-button {
-  margin: 5px;
-  padding: 10px 20px 10px 20px;
-  color: #fff;
-  background-color: #42b983;
-  border-radius: 3px;
-  outline: none;
-}
-button:hover {
-  background-color: #34a97e;
 }
 
 h1, h2 {
