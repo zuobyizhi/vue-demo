@@ -3,15 +3,18 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import Store from './store/'
+import store from './store/'
+import Layer from 'vue-layer'
 
 Vue.config.productionTip = false
+
+Vue.prototype.$layer = Layer(Vue)
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
-  Store,
+  store,
   template: '<App/>',
   components: { App }
 })

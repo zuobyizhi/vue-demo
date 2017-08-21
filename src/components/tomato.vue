@@ -68,19 +68,11 @@ export default {
       this.timer[i].work = bWork
     },
     deleteTimer (i) {
-      this.timer.splice(i, 1)
-    },
-    upTimer () {
-      let fn = function () {
-        for (let i = 0; i < this.timer.length; ++i) {
-          if (this.timer[i].work) {
-            if (Number(this.timer[i].time) > 0) {
-              this.timer[i].time -= 1
-            }
-          }
-        }
-      }
-      setInterval(fn, 1000)
+      let id = this.$layer.confirm('确认删除？', () => {
+        this.timer.splice(i, 1)
+        this.$layer.msg('删除成功', {})
+        this.$layer.close(id)
+      })
     }
   },
   mounted () {

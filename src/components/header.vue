@@ -1,9 +1,15 @@
 <template>
 	<div class="main-header">
     <ul>
-      <li><router-link to="/">首页</router-link></li>
-      <li><router-link to="fontreference">字体参考</router-link></li>
-      <li><router-link to="tomato">计时器</router-link></li>
+      <li :class="{active: Number(curTab) === 1}" @click='curTabChange(1)'>
+        <router-link to="/">首页</router-link>
+      </li>
+      <li :class="{active: Number(curTab) === 2}" @click='curTabChange(2)'>
+        <router-link to="fontreference">字体参考</router-link>
+      </li>
+      <li :class="{active: Number(curTab) === 3}" @click='curTabChange(3)'>
+        <router-link to="tomato">计时器</router-link>
+      </li>
     </ul>
 	</div>
 </template>
@@ -13,12 +19,18 @@ export default {
   name: 'hello',
   data () {
     return {
-      curTab: 1
+      curTab: this.$store.state.curTab || 1
+      // curTab: window.localStorage.getItem('curTab') || 1
     }
   },
+  // mounted () {
+  //  this.curTab = window.localStorage.getItem('curTab')
+  // },
   methods: {
-    curTabChange () {
+    curTabChange (i) {
+      this.curTab = i
       this.$store.state.curTab = this.curTab
+      window.localStorage.setItem('curTab', this.curTab)
     }
   }
 }
@@ -30,6 +42,9 @@ export default {
 	width: 100%;
 	height: 50px;
 	background-color: #42b983
+}
+.active {
+  background-color: #32a973
 }
 
 a {
