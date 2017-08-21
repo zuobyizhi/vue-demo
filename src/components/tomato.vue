@@ -40,7 +40,7 @@ export default {
   name: 'hello',
   data () {
     return {
-      timer: [{msg: '计时器1', time: 111, work: false}, {msg: '计时器2', time: 222, work: false}],
+      timer: [],
       msg: '',
       errMsg: '',
       time: ''
@@ -63,15 +63,18 @@ export default {
       this.msg = ''
       this.time = ''
       this.errMsg = ''
+      window.localStorage.setItem('timer', JSON.stringify(this.timer))
     },
     setTimerWork (i, bWork) {
       this.timer[i].work = bWork
+      window.localStorage.setItem('timer', JSON.stringify(this.timer))
     },
     deleteTimer (i) {
       let id = this.$layer.confirm('确认删除？', () => {
         this.timer.splice(i, 1)
         this.$layer.msg('删除成功', {})
         this.$layer.close(id)
+        window.localStorage.setItem('timer', JSON.stringify(this.timer))
       })
     }
   },
@@ -82,14 +85,17 @@ export default {
         if (self.timer[i].work) {
           if (Number(self.timer[i].time) > 0) {
             self.timer[i].time -= 1
+            window.localStorage.setItem('timer', JSON.stringify(self.timer))
           }
         }
       }
     }
     setInterval(fn, 1000)
 
-    self.timer.push({msg: '计时器3', time: 333, work: false})
-    self.timer.push({msg: '计时器4', time: 444, work: false})
+    let arr = JSON.parse(window.localStorage.getItem('timer'))
+    if (arr instanceof Array && arr.length > 0) {
+      this.timer = arr
+    }
   }
 }
 </script>
