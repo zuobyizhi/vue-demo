@@ -30,17 +30,15 @@ export default {
     }
   },
   mounted () {
-    const url = location.href
-    const re = /([^/]*)$/
-    const r = url.match(re)
-    const res = r[1] || ''
-    if (res === '') {
+    const res = this.$route.path
+    console.log(res)
+    if (res === '/') {
       this.curTabChange(1)
     }
-    if (res === 'fontreference') {
+    if (res === '/fontreference') {
       this.curTabChange(2)
     }
-    if (res === 'tomato') {
+    if (res === '/tomato') {
       this.curTabChange(3)
     }
   }
@@ -50,6 +48,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .main-header {
+  position: fixed;
+  top: 0;
+  left: 0;
 	width: 100%;
 	height: 50px;
 	background-color: #42b983

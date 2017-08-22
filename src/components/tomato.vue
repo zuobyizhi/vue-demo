@@ -197,6 +197,7 @@ export default {
       this.current = currentPage
       currentPage = this.current - 1
       this.getTimerLS(currentPage * this.display, (currentPage + 1) * this.display)
+      this.$router.push({path: '/tomato', query: {page: currentPage, type: this.showType}})
     },
     getTypeName: function (type) {
       for (let obj of TYPE) {
@@ -215,6 +216,7 @@ export default {
       //
       const currentPage = this.current - 1
       this.getTimerLS(currentPage * this.display, (currentPage + 1) * this.display)
+      this.$router.push({path: '/tomato', query: {page: currentPage, type: this.showType}})
     }
   },
   mounted () {
@@ -232,7 +234,12 @@ export default {
     }
     setInterval(fn, 1000)
 
-    this.getTimerLS(0, this.display)
+    this.current = Number(this.$route.query.page || 0) + 1
+    const currentPage = this.current - 1
+    this.showType = Number(this.$route.query.type || 0)
+    // this.getTimerLS(0, this.display)
+    this.getTimerLS(currentPage * this.display, (currentPage + 1) * this.display)
+    this.$router.push({path: '/tomato', query: {page: currentPage, type: this.showType}})
   }
 }
 </script>
