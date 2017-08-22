@@ -20,17 +20,28 @@ export default {
   data () {
     return {
       curTab: this.$store.state.curTab || 1
-      // curTab: window.localStorage.getItem('curTab') || 1
     }
   },
-  // mounted () {
-  //  this.curTab = window.localStorage.getItem('curTab')
-  // },
   methods: {
     curTabChange (i) {
       this.curTab = i
       this.$store.state.curTab = this.curTab
       window.localStorage.setItem('curTab', this.curTab)
+    }
+  },
+  mounted () {
+    const url = location.href
+    const re = /([^/]*)$/
+    const r = url.match(re)
+    const res = r[1] || ''
+    if (res === '') {
+      this.curTabChange(1)
+    }
+    if (res === 'fontreference') {
+      this.curTabChange(2)
+    }
+    if (res === 'tomato') {
+      this.curTabChange(3)
     }
   }
 }

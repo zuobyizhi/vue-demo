@@ -1,6 +1,12 @@
 <template>
   <div class="hello">
 		<div class="btns">
+			程度：
+      <select v-model="type">
+        <option value="0">请选择...</option>
+        <option value="1">普通</option>
+        <option value="2">重要</option>
+      </select>
 			内容：
 			<input class="inp" v-model="msg"/>
 			倒计时：
@@ -14,6 +20,13 @@
       <table class="table">
         <thead>
           <tr>
+            <th style="width: 80px">
+              <select v-model="showType">
+                <option value="0">全部</option>
+                <option value="1">普通</option>
+                <option value="2">重要</option>
+              </select>
+            </th>
             <th style="width: 80px">内容</th>
             <th style="width: 80px">倒计时</th>
             <th style="width: 80px">操作</th>
@@ -21,6 +34,7 @@
         </thead>
         <tbody>
           <tr v-for="(item, index) in timer">
+            <td>{{getTypeName(item.type || 0)}}</td>
             <td>{{item.msg}}</td>
             <td>{{item.time}}</td>
             <td>
@@ -39,6 +53,7 @@
 </template>
 
 <script type="es6">
+const TYPE = [{desc: "普通", value: 1}, {desc: "重要", value: 2}]
 export default {
   name: 'hello',
   data () {
@@ -47,6 +62,8 @@ export default {
       msg: '',
       errMsg: '',
       time: '',
+      type: 0,
+      showType: 0,
       total: 0,     // 记录总条数
       display: 5,   // 每页显示条数
       current: 1   // 当前的页数
@@ -69,8 +86,20 @@ export default {
     getTimerLS (start, end) {
       let arr = JSON.parse(window.localStorage.getItem('timer'))
       if (arr instanceof Array && arr.length > 0) {
-        this.timer = arr.slice(start, end)
-        this.total = arr.length
+        const st = Number(this.showType)
+        if (st === 0) {
+          this.timer = arr.slice(start, end)
+          this.total = arr.length
+        } else {
+          const midArr = []
+          for (let i = 0; i < arr.length; ++i) {
+            if (st === Number(arr[i].type || 0)) {
+              midArr.push(arr[i])
+            }
+          }
+          this.timer = midArr.slice(start, end)
+          this.total = midArr.length
+        }
       } else {
         this.timer = []
         this.total = 0
@@ -130,15 +159,20 @@ export default {
         this.errMsg = '倒计时必须为数字'
         return
       }
+      if (Number(this.type) === 0) {
+        this.errMsg = '请选择程度'
+        return
+      }
       if (this.msg.trim() === '' || this.time.trim() === '') {
         this.errMsg = '内容和倒计时必须非空'
         return
       }
       // this.timer.push({msg: this.msg.trim(), time: this.time.trim(), work: false})
-      this.addTimerLS({id: this.uuid(), msg: this.msg.trim(), time: this.time.trim(), work: false})
+      this.addTimerLS({id: this.uuid(), msg: this.msg.trim(), time: this.time.trim(), work: false, type: this.type})
       this.msg = ''
       this.time = ''
       this.errMsg = ''
+      this.type = ''
       // window.localStorage.setItem('timer', JSON.stringify(this.timer))
       let currentPage = this.current - 1
       this.getTimerLS(currentPage * this.display, (currentPage + 1) * this.display)
@@ -158,15 +192,30 @@ export default {
       })
     },
     pagechange:function(currentPage){
-      console.log(currentPage);
+      // console.log(currentPage);
       // ajax请求, 向后台发送 currentPage, 来获取对应的数据
       this.current = currentPage
       currentPage = this.current - 1
       this.getTimerLS(currentPage * this.display, (currentPage + 1) * this.display)
+    },
+    getTypeName: function (type) {
+      for (let obj of TYPE) {
+        if (Number(obj.value) === Number(type)) {
+          return obj.desc
+        }
+      }
+      return "普通"
     }
   },
   components: {
     'v-paging': require('./paging.vue')
+  },
+  watch: {
+    showType: function () {
+      //
+      const currentPage = this.current - 1
+      this.getTimerLS(currentPage * this.display, (currentPage + 1) * this.display)
+    }
   },
   mounted () {
     let self = this

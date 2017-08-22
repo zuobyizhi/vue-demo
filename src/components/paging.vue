@@ -101,7 +101,7 @@ export default{
   // height: 30px;
   // border-radius: 5px;
   margin: 3px;
-  padding: 5px;
+  // padding: 5px;
   color: #666;
 }
 .pagination li :hover {
