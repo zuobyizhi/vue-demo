@@ -5,10 +5,15 @@ import App from './App'
 import router from './router'
 import store from './store/'
 import Layer from 'vue-layer'
+import VueResource from 'vue-resource'
+
+Vue.use(VueResource)
 
 Vue.config.productionTip = false
 
 Vue.prototype.$layer = Layer(Vue)
+
+Vue.prototype.HOST = '/api'
 
 /* eslint-disable no-new */
 new Vue({

@@ -17,7 +17,9 @@
     "vue": "^2.3.3",
     "vue-router": "^2.6.0",
     "vue-layer": "*",
+    "vue-resource": "*",
     "less": "*",
+    "element-ui": "*",
     "less-loader": "*",
     "vuex": "^2.0.0"
   },
