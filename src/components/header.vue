@@ -15,13 +15,13 @@
       </li>
     </ul>
     <ul style="position: absolute; right: 20px">
-      <li v-if="!bLogin">
-        <router-link to="login">登录</router-link>
-      </li>
-      <li v-if="!bLogin">
+      <li :class="{active: Number(curTab) === 6}" @click='curTabChange(6)' v-if="!bLogin">
         <router-link to="register">注册</router-link>
       </li>
-      <li v-if="bLogin">
+      <li :class="{active: Number(curTab) === 5}" @click='curTabChange(5)' v-if="!bLogin">
+        <router-link to="login">登录</router-link>
+      </li>
+      <li v-if="bLogin" :class="{active: Number(curTab) === 7}" @click='curTabChange(7)'>
         <a href="javascript:;" @click="logout">退出</a>
       </li>
     </ul>
@@ -47,6 +47,7 @@ export default {
       this.setCookie('uid', '', new Date(Date.now() - 1))
       this.$router.push({path: '/login'})
       this.chkLogin()
+      this.curTab = 5
     },
     chkLogin () {
       const acct = Number(this.getCookie('uid'))
@@ -87,6 +88,10 @@ export default {
       this.curTabChange(3)
     } else if (res === '/httptest') {
       this.curTabChange(4)
+    } else if (res === '/login') {
+      this.curTabChange(5)
+    } else if (res === '/register') {
+      this.curTabChange(6)
     }
 
     this.chkLogin()

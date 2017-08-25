@@ -39,7 +39,7 @@
       </table>
 		</div>
     <div class="btns">
-      <v-paging :total="total" :current-page='current' :display='display' @pagechange="pagechange"></v-paging>
+      <v-paging :total="total" :currentPage='current' :display='display' @pagechange="pagechange"></v-paging>
     </div>
   </div>
 </template>
@@ -76,6 +76,9 @@ export default {
         if (res.data.code === 200) {
           this.timer = res.data.msg
           this.total = res.data.total
+          const currentPage = this.current
+          this.$router.push({path: '/httptest',
+          query: {page: currentPage, type: this.showType, content: this.msg}})
         }
       }, res => {
         console.info('调用失败')
@@ -174,9 +177,15 @@ export default {
     }
   },
   mounted () {
-    this.current = Number(this.$route.query.page || 0) + 1
-    const currentPage = this.current - 1
+    const uid = Number(this.getCookie('uid') || 0)
+    if (uid <= 0) {
+      this.errMsg = '本模块请先登录'
+      return
+    }
+    this.current = Number(this.$route.query.page || 1)
+    const currentPage = this.current
     this.showType = Number(this.$route.query.type || 0)
+    this.msg = (this.$route.query.content || '')
 
     this.getTimer()
   }
