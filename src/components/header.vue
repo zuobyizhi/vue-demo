@@ -10,6 +10,20 @@
       <li :class="{active: Number(curTab) === 3}" @click='curTabChange(3)'>
         <router-link to="tomato">计时器</router-link>
       </li>
+      <li :class="{active: Number(curTab) === 4}" @click='curTabChange(4)'>
+        <router-link to="httptest">备忘</router-link>
+      </li>
+    </ul>
+    <ul style="position: absolute; right: 20px">
+      <li v-if="!bLogin">
+        <router-link to="login">登录</router-link>
+      </li>
+      <li v-if="!bLogin">
+        <router-link to="register">注册</router-link>
+      </li>
+      <li v-if="bLogin">
+        <a href="javascript:;" @click="logout">退出</a>
+      </li>
     </ul>
 	</div>
 </template>
@@ -19,7 +33,8 @@ export default {
   name: 'hello',
   data () {
     return {
-      curTab: this.$store.state.curTab || 1
+      curTab: this.$store.state.curTab || 1,
+      bLogin: false
     }
   },
   methods: {
@@ -27,6 +42,38 @@ export default {
       this.curTab = i
       this.$store.state.curTab = this.curTab
       window.localStorage.setItem('curTab', this.curTab)
+    },
+    logout () {
+      this.setCookie('uid', '', new Date(Date.now() - 1))
+      this.$router.push({path: '/login'})
+      this.chkLogin()
+    },
+    chkLogin () {
+      const acct = Number(this.getCookie('uid'))
+      console.log('uid: ' + acct)
+      if (acct > 0 && !isNaN(acct)) {
+        this.bLogin = true
+      } else {
+        this.bLogin = false
+      }
+    },
+    setCookie: function (cname, cvalue, exdays) {
+      var d = new Date()
+      d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000))
+      var expires = 'expires=' + d.toUTCString()
+      console.info(cname + '=' + cvalue + '; ' + expires)
+      document.cookie = cname + '=' + cvalue + '; ' + expires
+      console.info(document.cookie)
+    },
+    getCookie: function (cname) {
+      var name = cname + '='
+      var ca = document.cookie.split(';')
+      for (var i = 0; i < ca.length; i++) {
+        var c = ca[i]
+        while (c.charAt(0) === ' ') c = c.substring(1)
+        if (c.indexOf(name) !== -1) return c.substring(name.length, c.length)
+      }
+      return ''
     }
   },
   mounted () {
@@ -34,13 +81,15 @@ export default {
     console.log(res)
     if (res === '/') {
       this.curTabChange(1)
-    }
-    if (res === '/fontreference') {
+    } else if (res === '/fontreference') {
       this.curTabChange(2)
-    }
-    if (res === '/tomato') {
+    } else if (res === '/tomato') {
       this.curTabChange(3)
+    } else if (res === '/httptest') {
+      this.curTabChange(4)
     }
+
+    this.chkLogin()
   }
 }
 </script>
@@ -53,7 +102,8 @@ export default {
   left: 0;
 	width: 100%;
 	height: 50px;
-	background-color: #42b983
+	background-color: #42b983;
+  box-shadow: 2px 2px 1px #ccc;
 }
 .active {
   background-color: #32a973

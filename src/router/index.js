@@ -4,6 +4,8 @@ import Hello from '@/components/Hello'
 import FontReference from '@/components/fontreference'
 import Tomato from '@/components/tomato'
 import HttpTest from '@/components/httptest'
+import Register from '@/components/register'
+import Login from '@/components/login'
 
 Vue.use(Router)
 
@@ -23,6 +25,16 @@ export default new Router({
       path: '/httptest',
       name: 'httptest',
       component: HttpTest
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: Register
     },
     {
       path: '/fontreference',
