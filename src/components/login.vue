@@ -37,7 +37,8 @@ export default {
       this.$http.get(url).then(res => {
         // this.movieList = res.data.subjects;
         console.log(res.data)
-        this.$router.push({path: '/'})
+        // this.$router.push({path: '/'})
+        window.location.href = '/'
       }, res => {
         console.info('调用失败')
       })

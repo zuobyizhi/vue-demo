@@ -1,15 +1,10 @@
 <template>
   <div class="hello">
 		<div class="btns">
-			程度：
-      <select v-model="type">
-        <option value="0">请选择...</option>
-        <option value="1">普通</option>
-        <option value="2">重要</option>
-      </select>
+			<button @click="goToAdd">+</button>
 			内容：
 			<input class="inp" v-model="msg"/>
-      <button @click="addTimer">确认</button>
+      <button @click="getTimer">搜索</button>
 		</div>
 		<div class="btns" style="color: red;" v-if="errMsg !== ''">
       <label>{{errMsg}}</label>
@@ -36,6 +31,7 @@
             <td>{{item.content}}</td>
             <td>{{getDate(item.createtime)}}</td>
             <td>
+              <button @click="updateTimer(item)">修改</button>
               <button class="deleteBtn" @click="deleteTimer(item.id)">删除</button>
             </td>
           </tr>
@@ -68,9 +64,13 @@ export default {
     getTimer () {
       const uid = Number(this.getCookie('uid'))
       const type = Number(this.showType)
+      const key = this.msg.trim()
       var url = this.HOST + '/tomato/list?uid=' + uid
       + '&type=' + type + '&start=' + (this.current - 1) * this.display
       + '&count=' + this.display
+      if (key !== '') {
+        url += '&key=' + key
+      }
       this.$http.get(url).then(res => {
         console.log(res.data)
         if (res.data.code === 200) {
@@ -105,6 +105,13 @@ export default {
       }, res => {
         console.info('调用失败')
       })
+    },
+    goToAdd () {
+      this.$router.push({path: '/todolistadd'})
+    },
+    updateTimer (item) {
+      this.$router.push({path: '/todolistupdate',
+      query: {id: item.id, content: item.content, type: item.type}})
     },
     deleteTimer (id) {
       let lid = this.$layer.confirm('确认删除？', () => {

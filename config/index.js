@@ -30,7 +30,7 @@ module.exports = {
     proxyTable: {
       '/api': {
         // target: 'http://api.douban.com/v2',
-        target: 'http://localhost:3000',
+        target: 'http://10.32.8.29:3000',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
